@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Spy Guard</string>
+    <string name="accessibility_service_label">Spy Guard Security Protection</string>
+    <string name="accessibility_service_description">Spy Guard accessibility service monitors application launches to protect locked apps with PIN, pattern, or biometric verification completely offline.</string>
+</resources>
