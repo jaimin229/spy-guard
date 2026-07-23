@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="accessibility_service_description">Spy Guard accessibility service monitors application launches to protect locked apps with PIN, pattern, or biometric verification completely offline.</string>
+    <string name="accessibility_service_label">Spy Guard Security Protection</string>
+    <string name="app_name">Spy Guard</string>
+    <style name="Theme.SpyGuard" parent="android:Theme.Material.NoActionBar">
+        <item name="android:statusBarColor">#090A10</item>
+        <item name="android:navigationBarColor">#090A10</item>
+        <item name="android:windowBackground">#090A10</item>
+    </style>
+    <style name="Theme.SpyGuard.LockOverlay" parent="Theme.SpyGuard">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowShowWallpaper">false</item>
+    </style>
+</resources>
