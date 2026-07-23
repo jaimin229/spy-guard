@@ -26,10 +26,21 @@ class MainActivity : AppCompatActivity() {
             startService(serviceIntent)
         }
 
+        // Preload Ads for maximum revenue
+        com.spyguard.security.core.ui.AdManager.loadAppOpenAd(this)
+        com.spyguard.security.core.ui.AdManager.loadInterstitialAd(this)
+        com.spyguard.security.core.ui.AdManager.showAppOpenAd(this)
+
         setContent {
             SpyGuardTheme {
                 MainNavGraph()
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Show App Open Ad whenever user resumes the application
+        com.spyguard.security.core.ui.AdManager.showAppOpenAd(this)
     }
 }

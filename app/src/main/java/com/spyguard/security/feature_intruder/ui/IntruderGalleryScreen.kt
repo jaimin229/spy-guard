@@ -33,6 +33,8 @@ fun IntruderGalleryScreen(
     val intruderLogs by viewModel.intruderLogs.collectAsState(initial = emptyList())
     var selectedLog by remember { mutableStateOf<IntruderLogEntity?>(null) }
 
+    val activity = LocalContext.current as? android.app.Activity
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -46,7 +48,15 @@ fun IntruderGalleryScreen(
         ) {
             Text(text = "Intruder Selfies", style = Typography.headlineLarge)
             if (intruderLogs.isNotEmpty()) {
-                IconButton(onClick = { viewModel.clearAllIntruderLogs() }) {
+                IconButton(onClick = {
+                    if (activity != null) {
+                        com.spyguard.security.core.ui.AdManager.showInterstitialAd(activity) {
+                            viewModel.clearAllIntruderLogs()
+                        }
+                    } else {
+                        viewModel.clearAllIntruderLogs()
+                    }
+                }) {
                     Icon(imageVector = Icons.Default.Delete, contentDescription = "Clear All", tint = AlertRed)
                 }
             }
@@ -55,7 +65,7 @@ fun IntruderGalleryScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         if (intruderLogs.isEmpty()) {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Box(modifier = Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.Center) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Icon(imageVector = Icons.Default.Warning, contentDescription = null, tint = TextSecondary, modifier = Modifier.size(64.dp))
                     Spacer(modifier = Modifier.height(16.dp))
@@ -65,6 +75,7 @@ fun IntruderGalleryScreen(
             }
         } else {
             LazyVerticalGrid(
+                modifier = Modifier.weight(1f),
                 columns = GridCells.Fixed(2),
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -74,6 +85,9 @@ fun IntruderGalleryScreen(
                 }
             }
         }
+
+        // AdMob Banner Ad
+        com.spyguard.security.core.ui.BannerAdView()
     }
 
     selectedLog?.let { log ->

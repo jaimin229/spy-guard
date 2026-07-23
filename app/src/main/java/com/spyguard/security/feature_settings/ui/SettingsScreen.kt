@@ -101,17 +101,26 @@ fun SettingsScreen(
         // Offline Backup & Restore
         SettingsHeader(title = "Offline Local Backup")
 
+        val activity = LocalContext.current as? android.app.Activity
+
         SettingsTile(
             title = "Export Local Encrypted Backup",
             subtitle = "Save encrypted security configuration file",
             icon = Icons.Default.Backup,
             onClick = {
-                viewModel.createBackup { file ->
-                    if (file != null) {
-                        Toast.makeText(context, "Backup created: ${file.name}", Toast.LENGTH_LONG).show()
-                    } else {
-                        Toast.makeText(context, "Backup creation failed", Toast.LENGTH_SHORT).show()
+                val performBackup = {
+                    viewModel.createBackup { file ->
+                        if (file != null) {
+                            Toast.makeText(context, "Backup created: ${file.name}", Toast.LENGTH_LONG).show()
+                        } else {
+                            Toast.makeText(context, "Backup creation failed", Toast.LENGTH_SHORT).show()
+                        }
                     }
+                }
+                if (activity != null) {
+                    com.spyguard.security.core.ui.AdManager.showInterstitialAd(activity, performBackup)
+                } else {
+                    performBackup()
                 }
             }
         )
