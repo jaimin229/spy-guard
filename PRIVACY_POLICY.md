@@ -67,4 +67,4 @@ Since all data resides on your device:
 If you have any questions or concerns regarding this Privacy Policy or Spy Guard's offline security design, please contact us at:
 
 - **Developer / Entity Name:** Spy Guard Security Team
-- **Support Email:** support@spyguard.security
+- **Support Email:** jaiminadac@gmail.com
