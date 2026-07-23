@@ -115,6 +115,9 @@ fun SettingsScreen(
                 }
             }
         )
+
+        // AdMob Banner Ad
+        com.spyguard.security.core.ui.BannerAdView()
     }
 
     if (showPinDialog) {

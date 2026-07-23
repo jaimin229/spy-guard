@@ -167,6 +167,9 @@ fun DashboardScreen(
             isOk = !uiState.isDevModeEnabled,
             onClick = {}
         )
+
+        // AdMob Banner Ad
+        com.spyguard.security.core.ui.BannerAdView()
     }
 }
 

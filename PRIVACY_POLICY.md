@@ -41,9 +41,11 @@ Spy Guard requests the following system permissions to perform its privacy featu
 
 ---
 
-## 4. Third-Party Services & SDKs
+## 4. Third-Party Services & Ad Networks
 
-Spy Guard uses **ZERO third-party SDKs, analytics, ad networks, or tracking services**. We do not use Google Analytics, Firebase, Crashlytics, AdMob, or any SDK that collects user identifiers or usage statistics.
+Spy Guard displays advertisements powered by **Google AdMob**. AdMob may collect and process certain non-personal device information (such as Google Advertising ID, device model, and coarse location) to serve non-personalized or personalized ads in compliance with Google Play Developer Policies.
+
+For more information, please review [Google Privacy Policy](https://policies.google.com/privacy).
 
 ---
 

@@ -81,6 +81,7 @@ fun AppListScreen(
             }
         } else {
             LazyColumn(
+                modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 items(uiState.filteredAppsList, key = { it.packageName }) { appInfo ->
@@ -91,6 +92,9 @@ fun AppListScreen(
                 }
             }
         }
+
+        // AdMob Banner Ad
+        com.spyguard.security.core.ui.BannerAdView()
     }
 }
 
