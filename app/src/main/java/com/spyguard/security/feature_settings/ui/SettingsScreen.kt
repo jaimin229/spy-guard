@@ -10,6 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Backup
 import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.Fingerprint
+import androidx.compose.material.icons.filled.Gesture
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.*
@@ -55,6 +56,16 @@ fun SettingsScreen(
             subtitle = "Set 4-digit Master Security PIN",
             icon = Icons.Default.Lock,
             onClick = { showPinDialog = true }
+        )
+
+        var showPatternDialog by remember { mutableStateOf(false) }
+        var newPatternText by remember { mutableStateOf("") }
+
+        SettingsTile(
+            title = "Set Security Pattern Lock",
+            subtitle = "Set 3x3 Master Lock Pattern (e.g. 1-2-3-6)",
+            icon = Icons.Default.Gesture,
+            onClick = { showPatternDialog = true }
         )
 
         SettingsSwitchTile(
@@ -139,6 +150,48 @@ fun SettingsScreen(
                         unfocusedBorderColor = BorderColor
                     )
                 )
+            },
+            containerColor = DarkCardBg
+        )
+    }
+
+    if (showPatternDialog) {
+        AlertDialog(
+            onDismissRequest = { showPatternDialog = false },
+            confirmButton = {
+                TextButton(onClick = {
+                    if (newPatternText.isNotEmpty()) {
+                        viewModel.savePattern(newPatternText)
+                        showPatternDialog = false
+                        Toast.makeText(context, "Pattern Lock Saved Successfully", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(context, "Please enter a valid pattern code", Toast.LENGTH_SHORT).show()
+                    }
+                }) {
+                    Text("Save Pattern", color = NeonGreen)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showPatternDialog = false }) {
+                    Text("Cancel", color = TextSecondary)
+                }
+            },
+            title = { Text("Set 3x3 Master Lock Pattern") },
+            text = {
+                Column {
+                    Text("Enter dot sequence separated by dashes (e.g. 1-2-3-6):", style = Typography.bodyMedium)
+                    Spacer(modifier = Modifier.height(8.dp))
+                    OutlinedTextField(
+                        value = newPatternText,
+                        onValueChange = { newPatternText = it },
+                        label = { Text("Pattern Sequence (e.g. 1-4-7-8-9)") },
+                        singleLine = true,
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = NeonGreen,
+                            unfocusedBorderColor = BorderColor
+                        )
+                    )
+                }
             },
             containerColor = DarkCardBg
         )

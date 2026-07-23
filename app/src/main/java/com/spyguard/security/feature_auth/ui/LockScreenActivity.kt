@@ -4,6 +4,8 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import com.spyguard.security.core.security.SecurityUtils
 import com.spyguard.security.feature_auth.AuthViewModel
 import com.spyguard.security.ui.theme.SpyGuardTheme
@@ -26,11 +28,20 @@ class LockScreenActivity : AppCompatActivity() {
 
         setContent {
             SpyGuardTheme {
-                PinLockScreen(
-                    packageName = packageName,
-                    viewModel = viewModel,
-                    onSuccessUnlock = { finish() }
-                )
+                val uiState by viewModel.uiState.collectAsState()
+                if (uiState.authType == "PATTERN") {
+                    PatternLockScreen(
+                        packageName = packageName,
+                        viewModel = viewModel,
+                        onSuccessUnlock = { finish() }
+                    )
+                } else {
+                    PinLockScreen(
+                        packageName = packageName,
+                        viewModel = viewModel,
+                        onSuccessUnlock = { finish() }
+                    )
+                }
             }
         }
     }

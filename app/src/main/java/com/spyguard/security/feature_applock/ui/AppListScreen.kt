@@ -13,6 +13,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -98,25 +99,56 @@ fun AppItemRow(
     appInfo: AppInfo,
     onToggleLock: () -> Unit
 ) {
+    val context = LocalContext.current
+    val iconBitmap = remember(appInfo.packageName) {
+        AppUtils.getAppIconBitmap(context, appInfo.packageName)
+    }
+
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(containerColor = DarkCardBg),
         shape = RoundedCornerShape(12.dp)
     ) {
         Row(
-            modifier = Modifier.padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+            modifier = Modifier.padding(12.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
+            if (iconBitmap != null) {
+                androidx.compose.foundation.Image(
+                    bitmap = iconBitmap.asImageBitmap(),
+                    contentDescription = appInfo.appName,
+                    modifier = Modifier
+                        .size(44.dp)
+                )
+            } else {
+                Box(
+                    modifier = Modifier
+                        .size(44.dp)
+                        .background(DarkSurface, shape = RoundedCornerShape(8.dp)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Lock,
+                        contentDescription = null,
+                        tint = TextSecondary,
+                        modifier = Modifier.size(24.dp)
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.width(16.dp))
+
             Column(modifier = Modifier.weight(1f)) {
                 Text(text = appInfo.appName, style = Typography.bodyLarge)
-                Text(text = appInfo.packageName, style = Typography.bodyMedium)
+                Text(text = appInfo.packageName, style = Typography.bodyMedium, maxLines = 1)
             }
+
             IconButton(onClick = onToggleLock) {
                 Icon(
                     imageVector = if (appInfo.isLocked) Icons.Default.Lock else Icons.Default.LockOpen,
                     contentDescription = null,
-                    tint = if (appInfo.isLocked) NeonGreen else TextSecondary
+                    tint = if (appInfo.isLocked) NeonGreen else TextSecondary,
+                    modifier = Modifier.size(28.dp)
                 )
             }
         }

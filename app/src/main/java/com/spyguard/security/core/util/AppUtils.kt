@@ -64,4 +64,24 @@ object AppUtils {
             null
         }
     }
+
+    fun getAppIconBitmap(context: Context, packageName: String): android.graphics.Bitmap? {
+        return try {
+            val drawable = getAppIcon(context, packageName) ?: return null
+            if (drawable is android.graphics.drawable.BitmapDrawable) {
+                return drawable.bitmap
+            }
+            val bitmap = android.graphics.Bitmap.createBitmap(
+                drawable.intrinsicWidth.coerceAtLeast(1),
+                drawable.intrinsicHeight.coerceAtLeast(1),
+                android.graphics.Bitmap.Config.ARGB_8888
+            )
+            val canvas = android.graphics.Canvas(bitmap)
+            drawable.setBounds(0, 0, canvas.width, canvas.height)
+            drawable.draw(canvas)
+            bitmap
+        } catch (e: Exception) {
+            null
+        }
+    }
 }
