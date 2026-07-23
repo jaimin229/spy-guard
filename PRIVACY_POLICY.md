@@ -1,5 +1,6 @@
 # Privacy Policy for Spy Guard
 
+**Hosted URL:** [https://jaimin229.github.io/spy-guard/](https://jaimin229.github.io/spy-guard/)  
 **Last Updated:** July 23, 2026
 
 **Spy Guard** ("we", "our", or "us") is committed to protecting your privacy. This Privacy Policy explains how our mobile application **Spy Guard** (`com.spyguard.security`) operates and handles user information.
