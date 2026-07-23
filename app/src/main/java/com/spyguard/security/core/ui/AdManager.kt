@@ -5,54 +5,21 @@ import android.content.Context
 import android.util.Log
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
-import com.google.android.gms.ads.appopen.AppOpenAd
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
+import com.google.android.gms.ads.rewarded.RewardedAd
+import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 
 object AdManager {
 
     private const val TAG = "AdManager"
 
     // Test Ad Unit IDs (Google Sample Test IDs)
-    private const val TEST_APP_OPEN_AD_ID = "ca-app-pub-3940256099942544/9257395921"
     private const val TEST_INTERSTITIAL_AD_ID = "ca-app-pub-3940256099942544/1033173712"
+    private const val TEST_REWARDED_AD_ID = "ca-app-pub-3940256099942544/5224354917"
 
-    private var mAppOpenAd: AppOpenAd? = null
     private var mInterstitialAd: InterstitialAd? = null
-    private var isShowingAd = false
-
-    // --- App Open Ads ---
-    fun loadAppOpenAd(context: Context) {
-        val request = AdRequest.Builder().build()
-        AppOpenAd.load(
-            context,
-            TEST_APP_OPEN_AD_ID,
-            request,
-            object : AppOpenAd.AppOpenAdLoadCallback() {
-                override fun onAdLoaded(ad: AppOpenAd) {
-                    Log.d(TAG, "App Open Ad Loaded")
-                    mAppOpenAd = ad
-                }
-
-                override fun onAdFailedToLoad(loadAdError: LoadAdError) {
-                    Log.e(TAG, "App Open Ad Failed to Load: ${loadAdError.message}")
-                    mAppOpenAd = null
-                }
-            }
-        )
-    }
-
-    fun showAppOpenAd(activity: Activity) {
-        if (!isShowingAd && mAppOpenAd != null) {
-            isShowingAd = true
-            mAppOpenAd?.show(activity)
-            mAppOpenAd = null
-            isShowingAd = false
-            loadAppOpenAd(activity) // Preload next
-        } else {
-            loadAppOpenAd(activity)
-        }
-    }
+    private var mRewardedAd: RewardedAd? = null
 
     // --- Interstitial Ads ---
     fun loadInterstitialAd(context: Context) {
@@ -84,6 +51,41 @@ object AdManager {
         } else {
             onAdDismissed()
             loadInterstitialAd(activity)
+        }
+    }
+
+    // --- Rewarded Ads ---
+    fun loadRewardedAd(context: Context) {
+        val adRequest = AdRequest.Builder().build()
+        RewardedAd.load(
+            context,
+            TEST_REWARDED_AD_ID,
+            adRequest,
+            object : RewardedAdLoadCallback() {
+                override fun onAdLoaded(rewardedAd: RewardedAd) {
+                    Log.d(TAG, "Rewarded Ad Loaded")
+                    mRewardedAd = rewardedAd
+                }
+
+                override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                    Log.e(TAG, "Rewarded Ad Failed to Load: ${loadAdError.message}")
+                    mRewardedAd = null
+                }
+            }
+        )
+    }
+
+    fun showRewardedAd(activity: Activity, onRewardEarned: () -> Unit) {
+        if (mRewardedAd != null) {
+            mRewardedAd?.show(activity) { rewardItem ->
+                Log.d(TAG, "User earned reward: ${rewardItem.amount} ${rewardItem.type}")
+                onRewardEarned()
+            }
+            mRewardedAd = null
+            loadRewardedAd(activity) // Preload next
+        } else {
+            onRewardEarned() // Fallback if ad fails to load
+            loadRewardedAd(activity)
         }
     }
 }
